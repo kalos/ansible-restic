@@ -6,6 +6,8 @@
 (
   PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:{{ restic_install_path }}
   export PATH
+  RESTIC_CACHE_DIR={{ restic_cache_path }}/{{ item.name }}
+  export RESTIC_CACHE_DIR
   RESTIC_REPOSITORY={{ item.url | trim | quote }}
   export RESTIC_REPOSITORY
   RESTIC_PASSWORD={{ item.password | trim | quote }}

@@ -20,6 +20,14 @@
     state: 'directory'
     path: '{{ restic_install_path }}'
 
+- name: Ensure restic cache directory exist
+  file:
+    state: 'directory'
+    path: '{{ restic_cache_path }}'
+    owner: '{{ restic_user }}'
+    group: '{{ restic_group }}'
+    mode: 0700
+
 - name: Ensure restic user can write to log dirs if defined
   file:
     state: 'directory'
