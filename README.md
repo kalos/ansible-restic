@@ -7,17 +7,13 @@
 [![Ansible Role](https://img.shields.io/badge/ansible%20role-paulfantom.restic-blue.svg)](https://galaxy.ansible.com/paulfantom/restic/)
 [![GitHub tag](https://img.shields.io/github/tag/paulfantom/ansible-restic.svg)](https://github.com/paulfantom/ansible-restic/tags)
 
-## IMPORTANT - Project archived
-
-Project is archived due to my lack of interest in maintaining it (I am not using it anymore). I will happily unarchive it if anyone is interested in maintaining it. If you are such person, write me an email at paulfantom@gmail.com.
-
 ## Description
 
 Deploy [restic](https://restic.net/) - fast, secure, efficient backup program.
 
 ## Requirements
 
-- Ansible > 2.2
+- Ansible >= 2.8
 - bzip2 installed on deployer machine (same one where ansible is installed)
 
 ## Role Variables
@@ -26,7 +22,7 @@ All variables which can be overridden are stored in [defaults/main.yml](defaults
 
 | Name           | Default Value | Description                        |
 | -------------- | ------------- | -----------------------------------|
-| `restic_version` | 0.9.6 | restic package version. Also accepts latest as parameter. |
+| `restic_version` | 0.10.0 | restic package version. Also accepts latest as parameter. |
 | `restic_user` | "root" | system user to run restic |
 | `restic_group` | "root" | system group to run restic |
 | `restic_shell` | "/bin/false" | the shell for the restic user, change this if you want to be able to su to it |
@@ -38,7 +34,7 @@ All variables which can be overridden are stored in [defaults/main.yml](defaults
 | `restic_sudo_command_whitelist` | [] | whitelist of commands restic is allowed to run with sudo |
 | `restic_includes_files` | [] | include list from file, instead use multiple FILE/DIR arguments in `command` |
 | `restic_excludes_files` | [] | exclude list from file, instead use multiple --exclude FILE/DIR arguments in restic `command` |
-| `restic_repos` | [] | restic repositories and cron jobs configuration. More in [defaults/main.yml](defaults/main.yml) |
+| `restic_repos` | [] | restic repositories, cron jobs and systemd configuration. More in [defaults/main.yml](defaults/main.yml) |
 
 ## Security
 
@@ -77,15 +73,15 @@ Use it in a playbook as follows:
 
 ## Local Testing
 
-The preferred way of locally testing the role is to use Docker and [molecule](https://github.com/metacloud/molecule) (v2.x). You will have to install Docker on your system. See Get started for a Docker package suitable to for your system.
+The preferred way of locally testing the role is to use Docker and [molecule](https://github.com/ansible-community/molecule) (v3.x). You will have to install Docker on your system. See Get started for a Docker package suitable to for your system.
 All packages you need to can be specified in one line:
 ```sh
-pip install ansible 'ansible-lint>=3.4.15' 'molecule>2.13.0' docker 'testinfra>=1.7.0' jmespath
+pip install -rtest-requirements.txt
 ```
 This should be similar to one listed in `.travis.yml` file in `install` section.
 After installing test suit you can run test by running
 ```sh
-molecule test --all
+molecule test
 ```
 For more information about molecule go to their [docs](http://molecule.readthedocs.io/en/latest/).
 

@@ -1,0 +1,80 @@
+---
+- name: Converge
+  hosts: all
+
+  vars:
+    restic_repos:
+      - name: local-example
+        url: "/tmp/restic"
+        password: "correcthorsebatterystaple"
+        jobs:
+          - command: 'restic backup /srv'
+            at: '0 1  * * *'
+        check_time: '0 22 * * 7'
+        retention_time: '17 5 * * *'
+        retention:
+          last: 2
+          hourly: 4
+          daily: 10
+          weekly: 9
+          monthly: 3
+          yearly: 10
+          tags:
+            - special
+      - name: local-example-systemd
+        url: "/tmp/restic-systemd"
+        password: "correcthorsebatterystaple"
+        systemd_jobs:
+          - name: 'backup'
+            restic_command: 'backup /srv'
+            timer: '*-*-* 1:00:00'
+          - name: 'forget'
+            restic_command: 'forget --prune --keep-last 2 --keep-hourly 4 --keep-daily 10 --keep-weekly 9 --keep-monthly 3 --keep-yearly 10 --keep-tag special '
+            timer: '*-*-* 5:17:00'
+          - name: 'backup-forget'
+            # insert more restic_command in order to concatenate them and not set more timer
+            restic_commands:
+              - 'backup /srv'
+              - 'forget ...'
+            timer: '*-*-* 1:00:00'
+          - name: 'check'
+            restic_command: 'check --read-data'
+            # use multiple timer
+            timers:
+              - 'Sun *-*-* 22:00:00'
+              - 'Wed *-*-* 3:00:00'
+            # set custom service, unit and timer options
+            service_opts: |
+              Nice=15
+              CPUSchedulingPolicy=batch
+              IOSchedulingClass=best-effort
+              IOSchedulingPriority=7
+              IOWeight=100
+            unit_opts: |
+              Wants=network-online.target
+              After=network-online.target
+              OnFailure=/usr/local/customscript.sh
+              ConditionACPower=true
+            timer_opts: |
+              RandomizedDelaySec=2h
+    restic_includes_files:
+      - filename: b2.includes
+        includes: |
+          /etc
+          /usr/local/etc
+    restic_excludes_files:
+      - filename: generic.excludes
+        excludes: |
+          **/tmp
+          **/cache
+      - filename: b2.excludes
+        excludes: |
+          bigdir/
+          **/log
+
+  tasks:
+    - name: "Include test"
+      include_role:
+        name: "ansible-restic"
+
+#- import_playbook: ../../playbook.yml
