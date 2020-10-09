@@ -20,6 +20,34 @@
     state: 'directory'
     path: '{{ restic_install_path }}'
 
+- name: Ensure restic configuration directory exist
+  file:
+    state: 'directory'
+    path: '{{ restic_config_path }}'
+    owner: '{{ restic_user }}'
+    group: '{{ restic_group }}'
+    mode: 0740
+
+- name: Deploy configs with includes
+  copy:
+    content: "{{ item.includes }}"
+    dest: "{{ restic_config_path }}/{{ item.filename }}"
+    owner: "{{ restic_user }}"
+    group: "{{ restic_group }}"
+    mode: '0640'
+  with_items: '{{ restic_includes_files }}'
+  no_log: true
+
+- name: Deploy configs with excludes
+  copy:
+    content: "{{ item.excludes }}"
+    dest: "{{ restic_config_path }}/{{ item.filename }}"
+    owner: "{{ restic_user }}"
+    group: "{{ restic_group }}"
+    mode: '0640'
+  with_items: '{{ restic_excludes_files }}'
+  no_log: true
+
 - name: Ensure restic cache directory exist
   file:
     state: 'directory'

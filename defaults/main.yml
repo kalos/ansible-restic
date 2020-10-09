@@ -7,6 +7,7 @@ restic_shell: "/bin/false"
 restic_home: "/var/lib/restic"
 
 restic_install_path: '/usr/local/bin'
+restic_config_path: '/etc/restic'
 restic_cache_path: '/var/cache/restic'
 
 restic_initialize_repos: true
@@ -19,6 +20,24 @@ restic_sudo_command_whitelist: []
 # restic_sudo_command_whitelist:
 #   - command: /usr/bin/some_backup_related_command_that_needs_sudo
 #     runas: root
+
+restic_includes_files: []
+# restic_includes_files:
+#   - filename: b2.includes
+#     includes: |
+#       /etc
+#       /usr/local/etc
+
+restic_excludes_files: []
+# restic_excludes_files:
+#   - filename: generic.excludes
+#     excludes: |
+#       **/tmp
+#       **/cache
+#   - filename: b2.excludes
+#     excludes: |
+#       bigdir/
+#       **/log
 
 restic_repos: []
 # restic_repos:
@@ -48,8 +67,11 @@ restic_repos: []
 #     b2_account_id: "B2_ACCOUNT_ID"
 #     b2_account_key: "B2_ACCOUNT_KEY"
 #   jobs:
-#     - command: 'restic backup /var'
-#       at: '0 4  * * *'
+#     # use --exclude and --files-from to avoid to insert very long command
+#     - command: >-
+#         restic backup /var
+#         --files-from {{ restic_config_path }}/b2.includes
+#         --exclude-file {{ restic_config_path }}/b2.excludes
 #     - command: 'restic backup /home'
 #       at: '0 3  * * *'
 #       user: 'restic'
