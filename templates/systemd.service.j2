@@ -1,0 +1,21 @@
+[Unit]
+Description=restic {{ item.name }} service for {{ repo_name }}
+{% if item.unit_opts is defined %}
+{{ item.unit_opts }}
+{% endif %}
+
+[Service]
+Type=oneshot
+User={{ restic_user }}
+
+{% if item.restic_commands is defined %}
+{% for cmd in item.restic_commands %}
+ExecStart={{ restic_install_path }}/restic-{{ repo_name }} {{ cmd }}
+{% endfor %}
+{% else %}
+ExecStart={{ restic_install_path }}/restic-{{ repo_name }} {{ item.restic_command }}
+{% endif %}
+
+{% if item.service_opts is defined %}
+{{ item.service_opts }}
+{% endif %}

@@ -59,6 +59,11 @@ This role also installs helper scripts to `restic_install_path`. These scripts a
 
 For example, if you have a restic repository named `testrepo`, you could use the `restic-testrepo` command, which will execute `restic` with the correct environment variables to manipulate that repository.
 
+## Systemd service and timer
+
+This role supports both cron and systemd.
+Just set the right variables in restic_repos ([defaults/main.yml](defaults/main.yml)).
+
 ## Example
 
 ### Playbook

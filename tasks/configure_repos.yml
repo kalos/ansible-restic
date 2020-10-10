@@ -1,10 +1,16 @@
 ---
+- name: Set variable if is systemd jobs
+  set_fact:
+    is_systemd_job: True
+  when: item.systemd_jobs is defined
+
 - name: Deploy cron script
   template:
     src: 'restic.cron.j2'
     dest: '/etc/cron.d/restic-{{ item.name }}'
     mode: '0640'
   no_log: true
+  when: is_systemd_job is undefined
 
 - name: Deploy helper commands
   template:
@@ -14,6 +20,16 @@
     group: "{{ restic_group }}"
     mode: '0750'
   no_log: true
+
+- name: Get repository name
+  set_fact:
+    repo_name: "{{ item.name }}"
+
+- include: systemd.yml
+  with_items: '{{ item.systemd_jobs }}'
+  when: is_systemd_job is defined
+  tags:
+    - systemd
 
 - name: Check if repo is already initialized
   command: "{{ restic_install_path }}/restic-{{ item.name }} snapshots"

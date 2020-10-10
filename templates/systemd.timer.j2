@@ -1,0 +1,18 @@
+[Unit]
+Description=restic {{ item.name }} timer for {{ repo_name }}
+
+[Timer]
+{% if item.timers is defined %}
+{% for t in item.timers %}
+OnCalendar={{ t }}
+{% endfor %}
+{% elif item.timer %}
+OnCalendar={{ item.timer }}
+{% endif %}
+
+{% if item.timer_opts is defined %}
+{{ item.timer_opts }}
+{% endif %}
+
+[Install]
+WantedBy=timers.target
