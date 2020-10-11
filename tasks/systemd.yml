@@ -2,7 +2,7 @@
 - name: Deploy systemd service
   template:
     src: systemd.service.j2
-    dest: "/etc/systemd/system/restic-{{ repo_name }}-{{ item.name }}.service"
+    dest: "/etc/systemd/system/restic-{{ repo_name }}-{{ systemd_job.name }}.service"
     owner: "root"
     group: "root"
     mode: '0644'
@@ -10,13 +10,13 @@
 - name: Deploy systemd timer
   template:
     src: systemd.timer.j2
-    dest: "/etc/systemd/system/restic-{{ repo_name }}-{{ item.name }}.timer"
+    dest: "/etc/systemd/system/restic-{{ repo_name }}-{{ systemd_job.name }}.timer"
     owner: "root"
     group: "root"
     mode: '0644'
 
 - name: Enable and start restic systemd timer
   systemd:
-    name: "restic-{{ repo_name }}-{{ item.name }}.timer"
+    name: "restic-{{ repo_name }}-{{ systemd_job.name }}.timer"
     enabled: yes
     state: started

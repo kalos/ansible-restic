@@ -35,7 +35,7 @@
     owner: "{{ restic_user }}"
     group: "{{ restic_group }}"
     mode: '0640'
-  with_items: '{{ restic_includes_files }}'
+  loop: "{{ restic_includes_files|flatten(levels=1) }}"
   no_log: true
 
 - name: Deploy configs with excludes
@@ -45,7 +45,7 @@
     owner: "{{ restic_user }}"
     group: "{{ restic_group }}"
     mode: '0640'
-  with_items: '{{ restic_excludes_files }}'
+  loop: "{{ restic_excludes_files|flatten(levels=1) }}"
   no_log: true
 
 - name: Ensure restic cache directory exist
@@ -60,7 +60,7 @@
   file:
     state: 'directory'
     path: '{{ item | dirname }}'
-  with_items:
+  loop:
     - "{{ restic_cron_stdout_file }}"
     - "{{ restic_cron_stderr_file }}"
   when:
@@ -74,7 +74,7 @@
     owner: '{{ restic_user }}'
     group: '{{ restic_group }}'
     mode: 0640
-  with_items:
+  loop:
     - "{{ restic_cron_stdout_file }}"
     - "{{ restic_cron_stderr_file }}"
   when:

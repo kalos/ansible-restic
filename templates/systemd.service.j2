@@ -1,21 +1,21 @@
 [Unit]
-Description=restic {{ item.name }} service for {{ repo_name }}
-{% if item.unit_opts is defined %}
-{{ item.unit_opts }}
+Description=restic {{ systemd_job.name }} service for {{ repo_name }}
+{% if systemd_job.unit_opts is defined %}
+{{ systemd_job.unit_opts }}
 {% endif %}
 
 [Service]
 Type=oneshot
 User={{ restic_user }}
 
-{% if item.restic_commands is defined %}
-{% for cmd in item.restic_commands %}
+{% if systemd_job.restic_commands is defined %}
+{% for cmd in systemd_job.restic_commands %}
 ExecStart={{ restic_install_path }}/restic-{{ repo_name }} {{ cmd }}
 {% endfor %}
 {% else %}
-ExecStart={{ restic_install_path }}/restic-{{ repo_name }} {{ item.restic_command }}
+ExecStart={{ restic_install_path }}/restic-{{ repo_name }} {{ systemd_job.restic_command }}
 {% endif %}
 
-{% if item.service_opts is defined %}
-{{ item.service_opts }}
+{% if systemd_job.service_opts is defined %}
+{{ systemd_job.service_opts }}
 {% endif %}

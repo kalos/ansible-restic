@@ -1,17 +1,17 @@
 [Unit]
-Description=restic {{ item.name }} timer for {{ repo_name }}
+Description=restic {{ systemd_job.name }} timer for {{ repo_name }}
 
 [Timer]
-{% if item.timers is defined %}
-{% for t in item.timers %}
+{% if systemd_job.timers is defined %}
+{% for t in systemd_job.timers %}
 OnCalendar={{ t }}
 {% endfor %}
-{% elif item.timer %}
-OnCalendar={{ item.timer }}
+{% elif systemd_job.timer %}
+OnCalendar={{ systemd_job.timer }}
 {% endif %}
 
-{% if item.timer_opts is defined %}
-{{ item.timer_opts }}
+{% if systemd_job.timer_opts is defined %}
+{{ systemd_job.timer_opts }}
 {% endif %}
 
 [Install]
