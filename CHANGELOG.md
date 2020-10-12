@@ -1,6 +1,16 @@
 # Change Log
 
-## [**Next release**](https://galaxy.ansible.com/paulfantom/restic)
+## [0.16.0](https://galaxy.ansible.com/paulfantom/restic) (2020-11-12)
+**Implemented enhancements:**
+
+- Add flake8 as pip requirements for testing ([kalos](https://github.com/kalos))
+- Use |bool with bare variables ([kalos](https://github.com/kalos))
+- Migrate to molecule v3 and 'restore' the project ([kalos](https://github.com/kalos))
+- Convert 'with_items' to 'loop' ([kalos](https://github.com/kalos))
+- Add systemd service/timer support ([kalos](https://github.com/kalos))
+- Add inclusion and exclusion patterns files ([kalos](https://github.com/kalos))
+- Create and use RESTIC_CACHE_DIR ([kalos](https://github.com/kalos))
+- Improves checksum verification [\#66](https://github.com/paulfantom/ansible-restic/pull/66) ([kalos](https://github.com/kalos))
 
 **Merged pull requests:**
 
