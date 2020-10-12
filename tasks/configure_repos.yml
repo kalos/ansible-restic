@@ -47,4 +47,4 @@
   no_log: true
   when:
     - repo.rc != 0
-    - restic_initialize_repos
+    - restic_initialize_repos |bool
